@@ -6,33 +6,29 @@ import webbrowser
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import comtypes
 
-# URLs with proper quotation marks
+
 url1 = 'https://chat.openai.com/'
 url2 = 'https://www.youtube.com/'
 url3 = 'https://www.google.co.in/'
 url4 = 'https://www.linkedin.com/in/swastik-pandey-3ba5a62a9/'
 url5 = 'https://classroom.google.com/u/1/?pli=1'
-add = 10.0  # Volume increment
-
-# Initialize Core Audio APIs
 
 
-# Load the hand gesture classification model
+
+
+
+
 model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
 
-# Initialize webcam capture
 cap = cv2.VideoCapture(0)
 
-# Initialize mediapipe hands module
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-# Initialize hands detection
 hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.5, max_num_hands=1)
 
-# Mapping of gesture labels to actions
 labels_dict = {0: 'A', 1: 'B', 2: 'c', 3: 'd', 4: 'E',}
 
 while True:
@@ -50,9 +46,9 @@ while True:
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(
-                frame,  # Image to draw
-                hand_landmarks,  # Model output
-                mp_hands.HAND_CONNECTIONS,  # Hand connections
+                frame,  
+                hand_landmarks,  
+                mp_hands.HAND_CONNECTIONS, 
                 mp_drawing_styles.get_default_hand_landmarks_style(),
                 mp_drawing_styles.get_default_hand_connections_style())
 
@@ -80,7 +76,6 @@ while True:
         
         devices = AudioUtilities.GetSpeakers()
 
-        # Perform actions based on predicted gesture
         cv2.putText(frame, predicted_character , (100, 50), cv2.FONT_HERSHEY_COMPLEX, 1.3, (255, 0, 0), 3, cv2.LINE_AA)
         if predicted_character == 'A':
             webbrowser.open_new_tab(url3)
@@ -95,8 +90,6 @@ while True:
             
 
     cv2.imshow('frame', frame)
-
-    # Change waitKey parameter to break on 'q' press and reduce wait time
     if cv2.waitKey(2500) & 0xFF == ord('q'):
         break
 
